@@ -1,0 +1,1179 @@
+#LyX 1.5.6 created this file. For more info see http://www.lyx.org/
+\lyxformat 276
+\begin_document
+\begin_header
+\textclass report
+\language brazilian
+\inputencoding auto
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+\graphics default
+\paperfontsize default
+\spacing single
+\papersize a4paper
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\cite_engine basic
+\use_bibtopic false
+\paperorientation portrait
+\secnumdepth 0
+\tocdepth 3
+\paragraph_separation skip
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\author "" 
+\author "" 
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Projeto de SNEDO: Modelo de Van der Pol
+\end_layout
+
+\begin_layout Author
+Amadeus Folego da Silva
+\end_layout
+
+\begin_layout Date
+Prof.
+ Dr.
+ André Fonseca - CMCC
+\end_layout
+
+\begin_layout Abstract
+Neste trabalho é apresentado o modelo de Van der Pol e sua contextualização
+ histórica; é feita uma breve análise qualitativa, apresentados resultados
+ de simulações realizadas com os métodos numéricos Runge-Kutta de quarta
+ ordem, Euler melhorado e a interpretação destes; por final são apresentados
+ os códigos dos métodos utilizados.
+\end_layout
+
+\begin_layout Standard
+\begin_inset LatexCommand tableofcontents
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Chapter
+Introdução histórica
+\end_layout
+
+\begin_layout Standard
+Ao trabalhar com válvulas pela Philips, o engenheiro elétrico e físico holandês
+ Balthasar Van der Pol notou algumas oscilações que tendiam a um ciclo-limite
+ quando o circuito era induzido em suas proximidades, e propôs um modelo
+ chamado de oscilador de Van der Pol.
+\end_layout
+
+\begin_layout Standard
+O modelo consiste, basicamente, de uma equação diferencial ordinária de
+ segunda ordem, com um parâmetro de amortecimento negativo associado, que
+ pode ser escrita como:
+\newline
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{eqnarray*}
+\frac{d^{2}y(t)}{dt^{2}}+\mu(y^{2}-1)\frac{dy(t)}{dt}+y(t) & = & acos(bt)\,;\,\mu,a,b\in\Re\end{eqnarray*}
+
+\end_inset
+
+
+\newline
+
+\end_layout
+
+\begin_layout Standard
+Alguns fenômenos têm relação com este modelo: em 1927, van der Mark e van
+ der Pol publicaram um trabalho na Nature relatando a presença de um ruído
+ irregular ao induzir circuitos a certas frequências naturais; ao ser extendido,
+ esse modelo pode ser aplicado nos potenciais de ação de neurônios; em sismologi
+a pode ser utilizado para modelar duas placas de uma falha geológica.
+ 
+\end_layout
+
+\begin_layout Standard
+O relato do ruído irregular é tido como uma das primeiras evidências de
+ caos determinístico.
+\end_layout
+
+\begin_layout Standard
+Até hoje, extensões do modelo de Van der Pol são comuns em problemas reais
+ e modelos mais gerais de sistemas dinâmicos tiveram como base sua formulação.
+ 
+\end_layout
+
+\begin_layout Chapter
+Interpretação dos resultados
+\end_layout
+
+\begin_layout Section
+Breve análise
+\end_layout
+
+\begin_layout Standard
+Voltemos à equação de Van der Pol original e tratemos o caso 
+\begin_inset Formula $\mu>0$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{eqnarray*}
+\frac{d^{2}y(t)}{dt^{2}}+\mu(y^{2}-1)\frac{dy(t)}{dt}+y(t) & = & acos(bt)\,;\,\mu,a,b\in\Re\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Foi provado por Liénard que, sob estas condições, o oscilador sempre tende
+ a um ciclo-limite, este teorema é chamado de Teorema de Liénard.
+\begin_inset LatexCommand cite
+key "hirsch"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Trabalharemos com o oscilador não forçado, isto é, o modelo de Van der Pol
+ com 
+\begin_inset Formula $a=0$
+\end_inset
+
+.
+ Reescrevendo a equação de Van der Pol em duas equações diferenciais de
+ primeira ordem, através da inclusão da variável 
+\begin_inset Formula $x(t)$
+\end_inset
+
+, e incluindo condições iniciais :
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \[
+\begin{cases}
+y'(t)=x(t) & x(t_{0})=x_{0}\\
+x'(t)=\mu(1-y^{2})x-y & y(t_{0})=y_{0}\end{cases}\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Para efeito de simplicidade, mas sem perder a generalidade vamos assumir,
+ em geral, 
+\begin_inset Formula $x_{0}=0$
+\end_inset
+
+ e 
+\begin_inset Formula $y_{0}=2$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+As simulações serão realizadas utilizando o script 
+\shape italic
+rungekutta4o2.m
+\shape default
+, com passo igual a 2e-3; exceto na última seção.
+ 
+\end_layout
+
+\begin_layout Standard
+Na última seção é comparada a convergência do método Runge-Kutta de quarta
+ ordem com o Euler melhorado para o modelo de Van der Pol, tendo como base
+ a simulação do modelo com o método ode45 do Matlab.
+\newpage
+
+\end_layout
+
+\begin_layout Subsection
+Amortecimento positivo
+\end_layout
+
+\begin_layout Standard
+Quando 
+\begin_inset Formula $\mu<0$
+\end_inset
+
+ e pequenas quantidades de 
+\begin_inset Formula $y(t)$
+\end_inset
+
+, o sistema é amortecido, isto é, 
+\begin_inset Formula $y\rightarrow0$
+\end_inset
+
+ conforme 
+\begin_inset Formula $t\rightarrow\infty$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+No entanto, para quantidades de 
+\begin_inset Formula $y(t)$
+\end_inset
+
+ maiores o sistema explode.
+ Uma simulação para este caso não é apresentada, o sistema evolui tão rápido
+ que facilmente foge da escala.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename B:/Trabalho/Van Der Pol/xt-1.eps
+	width 60col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Caption
+
+\begin_layout Standard
+Simulação do modelo com 
+\begin_inset Formula $\mu=-1$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename B:/Trabalho/Van Der Pol/xy-1.eps
+	width 60col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Caption
+
+\begin_layout Standard
+Gráfico de fase com 
+\begin_inset Formula $\mu=-1$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Conjectura-se que a bacia de atração será a região circunscrita por um círculo
+ de raio 2.
+ A origem será um sorvedouro e único ponto de equilíbrio.
+\end_layout
+
+\begin_layout Standard
+
+\newpage
+
+\end_layout
+
+\begin_layout Subsection
+Baixo amortecimento
+\end_layout
+
+\begin_layout Standard
+Note que, quando 
+\begin_inset Formula $\mu\approx0$
+\end_inset
+
+ e positivo, o oscilador se aproxima do oscilador harmônico e o ciclo-limite
+ no gráfico de fase se aproxima de um círculo com raio 2.
+ No entanto, conforme 
+\begin_inset Formula $\mu$
+\end_inset
+
+ aumenta, o ciclo começa a tomar uma forma particular.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename ciclolimite0.1
+	width 60col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Caption
+
+\begin_layout Standard
+Ciclo limite para 
+\begin_inset Formula $\mu=0.1$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename xy0.4.eps
+	width 60col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Caption
+
+\begin_layout Standard
+Ciclo limite para 
+\begin_inset Formula $\mu=0.4$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\newpage
+
+\end_layout
+
+\begin_layout Subsection
+Auto-sustentação
+\end_layout
+
+\begin_layout Standard
+Observe que a equação de Van der Pol é da forma:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{eqnarray*}
+\frac{d^{2}y(t)}{dt^{2}}+p(y)\frac{dy(t)}{dt}+y(t) & = & 0\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Onde 
+\begin_inset Formula $p(y)$
+\end_inset
+
+ é uma função de amortecimento, neste caso temos um amortecimento não-linear
+ com 
+\begin_inset Formula $p(y)=\mu(y^{2}-1)\,,\,\mu>0$
+\end_inset
+
+.
+ Quando 
+\begin_inset Formula $p(y)>0$
+\end_inset
+
+, isto é, 
+\begin_inset Formula $|y|>1$
+\end_inset
+
+, o sistema é amortecido positivamente, 
+\begin_inset Formula $|y(t)|$
+\end_inset
+
+ começa a decrescer com o tempo; e quando 
+\begin_inset Formula $p(y)<0$
+\end_inset
+
+, isto é, 
+\begin_inset Formula $|y|<1$
+\end_inset
+
+, o sistema é amortecido positivamente, 
+\begin_inset Formula $|y(t)|$
+\end_inset
+
+ começa a crescer com o tempo.
+ 
+\end_layout
+
+\begin_layout Standard
+Então temos uma situação onde o sistema tende a se auto-sustentar com o
+ tempo 
+\begin_inset LatexCommand cite
+key "monteiro"
+
+\end_inset
+
+.
+ Ele perde energia quando 
+\begin_inset Formula $|y(t)|$
+\end_inset
+
+ é grande e 'ganha' energia quando 
+\begin_inset Formula $|y(t)|$
+\end_inset
+
+ é pequeno, o que o faz tender ao ciclo-limite exceto para o ponto 
+\begin_inset Formula $x_{0}=0,\, y_{0}=0$
+\end_inset
+
+, que é um ponto de equilíbrio instável.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename y0=4.eps
+	width 70col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Caption
+
+\begin_layout Standard
+Simulação para 
+\begin_inset Formula $\mu=1,\,(x_{0},y_{0})=(-3,-3)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename y0=0.1
+	width 60col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Caption
+
+\begin_layout Standard
+Simulação para 
+\begin_inset Formula $\mu=1,\, y_{0}=0.1$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\newpage
+
+\end_layout
+
+\begin_layout Section
+Convergência do método e confiabilidade dos resultados
+\end_layout
+
+\begin_layout Standard
+Primeiramente vamos comparar o método Runge-Kutta de quarta ordem e Euler
+ melhorado com passo 2e-3, implementados respectivamente nos script's 
+\shape italic
+rungekutta4o2.m
+\shape default
+ e 
+\shape italic
+eulermelhoradoo2.m
+\shape default
+, com o método ode45 do Matlab a fim de que possamos utilizá-lo como base
+ de comparação confiável futuramente.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename rkrg.eps
+	width 50col%
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename rkrgc.eps
+	width 50col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Caption
+
+\begin_layout Standard
+Simulação com 
+\begin_inset Formula $\mu=1$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Nota-se que, a menos de grandes variações de 
+\begin_inset Formula $y(t)$
+\end_inset
+
+, os métodos convergem bem com passo baixo.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename yt10.eps
+	width 50col%
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename rgrc10.eps
+	width 50col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Caption
+
+\begin_layout Standard
+Simulação com 
+\begin_inset Formula $\mu=10$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+As curvas dos métodos implementados se confundem nas figuras anteriores.
+ Poderia ter sido utilizado o método de Euler melhorado ao invés do Runge-Kutta.
+ 
+\end_layout
+
+\begin_layout Standard
+
+\newpage
+
+\end_layout
+
+\begin_layout Standard
+A variedade de situações simuladas, o baixo custo computacional e o fato
+ do segundo método convergir melhor em variações mais altas motivaram a
+ escolha.
+ Fica bem mais evidente a diferença quando o passo é aumentado em duas ordens
+ de grandeza.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename yt100.eps
+	width 50col%
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename rkrgc100.eps
+	width 50col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Caption
+
+\begin_layout Standard
+Simulação com 
+\begin_inset Formula $\mu=1$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Finalmente, justifica-se a opção de método utilizado na breve análise pela
+ confiabilidade verificada aqui nesta seção.
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+\newpage
+
+\end_layout
+
+\begin_layout Chapter
+Código implementado
+\end_layout
+
+\begin_layout Section
+
+\shape italic
+vanderpol.m
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "basicstyle={\small},breaklines=true,extendedchars=true,language=Matlab,numbers=left,numberstyle={\small}"
+inline false
+status collapsed
+
+\begin_layout Standard
+
+function [t,x,y] = vanderpol(mu, n, I, C, metodo)
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+% Função que simula o modelo de Van der Pol com parâmetro mu, n número de
+ iterações, intervalo na forma [ti tf], condições iniciais na forma [x0
+ y0], e nome do método a ser utilizado
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+   S.dy = @(t,x) x ;  
+\end_layout
+
+\begin_layout Standard
+
+   S.dx = @(t,x,y) mu*(1-y^2)*x-y ;  
+\end_layout
+
+\begin_layout Standard
+
+   eval(['[t x y] = ' metodo 'o2plota(S,n,I,C,''Van der Pol para 
+\backslash
+mu=' num2str(mu) ''')'])         
+\end_layout
+
+\begin_layout Standard
+
+   subplot(2,1,1)
+\end_layout
+
+\begin_layout Standard
+
+     plot(t,x,'r',t,y,'b')  
+\end_layout
+
+\begin_layout Standard
+
+     legend('x(t)','y(t)')   
+\end_layout
+
+\begin_layout Standard
+
+     xlabel('t')       
+\end_layout
+
+\begin_layout Standard
+
+   subplot(2,1,2)   
+\end_layout
+
+\begin_layout Standard
+
+     plot(x,y)   
+\end_layout
+
+\begin_layout Standard
+
+     xlabel('x(t)')
+\end_layout
+
+\begin_layout Standard
+
+     ylabel('y(t)') 
+\end_layout
+
+\begin_layout Standard
+
+end                         
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\clearpage
+
+\end_layout
+
+\begin_layout Section
+
+\shape italic
+rungekutta4o2.m 
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "basicstyle={\small},breaklines=true,extendedchars=true,language=Matlab,numbers=left,numberstyle={\small}"
+inline false
+status collapsed
+
+\begin_layout Standard
+
+function [t,x,y] = rungekutta4o2(S,n,I,C)      
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+% Entradas: conjunto handle com S.dx(t,x,y) e S.dy(t,x), número de iterações,
+ intervalo no formato [ti tf], conjunto de condições no formato [y0 x0]
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+    h = (I(2)-I(1))/n ; % calculo passo           
+\end_layout
+
+\begin_layout Standard
+
+    t(1) = I(1); % condições iniciais
+\end_layout
+
+\begin_layout Standard
+
+    x(1) = C(1);       
+\end_layout
+
+\begin_layout Standard
+
+    y(1) = C(2);       
+\end_layout
+
+\begin_layout Standard
+
+    for i=1:n-1  % faço as iterações
+\end_layout
+
+\begin_layout Standard
+
+       t(i+1) = t(i) + h ;  
+\end_layout
+
+\begin_layout Standard
+
+       k(1) = S.dy(t(i),x(i)) ; % calculo próximo y
+\end_layout
+
+\begin_layout Standard
+
+       k(2) = S.dy(t(i)+h/2 ,x(i)+(h/2)*k(1)) ; 
+\end_layout
+
+\begin_layout Standard
+
+       k(3) = S.dy(t(i)+h/2 ,x(i)+(h/2)*k(2)) ; 
+\end_layout
+
+\begin_layout Standard
+
+       k(4) = S.dy(t(i)+h ,x(i)+h*k(3)) ;       
+\end_layout
+
+\begin_layout Standard
+
+       y(i+1) = y(i) + (h/6)*(k*[1 2 2 1]') ;   
+\end_layout
+
+\begin_layout Standard
+
+       k(1) = S.dx(t(i),x(i),y(i)) ; % calculo próximo x
+\end_layout
+
+\begin_layout Standard
+
+       k(2) = S.dx(t(i)+h/2 ,x(i)+(h/2)*k(1) ,y(i)) ; 
+\end_layout
+
+\begin_layout Standard
+
+       k(3) = S.dx(t(i)+h/2 ,x(i)+(h/2)*k(2) ,y(i)) ; 
+\end_layout
+
+\begin_layout Standard
+
+       k(4) = S.dx(t(i)+h ,x(i)+h*k(3) ,y(i)) ;       
+\end_layout
+
+\begin_layout Standard
+
+       x(i+1) = x(i) + (h/6)*(k*[1 2 2 1]') ;         
+\end_layout
+
+\begin_layout Standard
+
+    end  
+\end_layout
+
+\begin_layout Standard
+
+end                                           
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+
+\shape italic
+eulermelhoradoo2.m
+\shape default
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "basicstyle={\small},breaklines=true,extendedchars=true,language=Matlab,numbers=left"
+inline false
+status collapsed
+
+\begin_layout Standard
+
+function [t,x,y] = eulermelhoradoo2(S,n,I,C)
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+% Entradas: conjunto handle com S.dx(t,x,y) e S.dy(t,x), número de iterações,
+ intervalo no formato [ti tf], conjunto de condições no formato [y0 x0]
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+   h = (I(2)-I(1))/n; % calculo passo
+\end_layout
+
+\begin_layout Standard
+
+   t(1) = I(1); % condições iniciais
+\end_layout
+
+\begin_layout Standard
+
+   y(1) = C(2);
+\end_layout
+
+\begin_layout Standard
+
+   x(1) = C(1);
+\end_layout
+
+\begin_layout Standard
+
+   for i=1:n-1 % faço as iterações
+\end_layout
+
+\begin_layout Standard
+
+      t(i+1) = t(i) + h ;
+\end_layout
+
+\begin_layout Standard
+
+      k(1) = S.dy(t(i),x(i)) ; % calculo próximo y
+\end_layout
+
+\begin_layout Standard
+
+      k(2) = S.dy(t(i)+h/2 ,x(i)+(h/2)*k(1)) ; 
+\end_layout
+
+\begin_layout Standard
+
+      y(i+1) = y(i) + h*k(2) ;                 
+\end_layout
+
+\begin_layout Standard
+
+      k(1) = S.dx(t(i),x(i),y(i)) ; % calculo próximo x 
+\end_layout
+
+\begin_layout Standard
+
+      k(2) = S.dx(t(i)+h/2 ,x(i)+(h/2)*k(1),y(i)) ;
+\end_layout
+
+\begin_layout Standard
+
+      x(i+1) = x(i) + h*k(2) ;              
+\end_layout
+
+\begin_layout Standard
+
+   end 
+\end_layout
+
+\begin_layout Standard
+
+end                                          
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\newpage
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset LatexCommand bibtex
+options "plain"
+bibfiles "bibfile"
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document
